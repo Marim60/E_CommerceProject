@@ -1,0 +1,185 @@
+﻿@using Newtonsoft.Json
+@using System.Collections.Generic
+@model CheckOutViewModel
+@{
+    var jsonString = Context.Session.GetString("cart_" + User.Identity.Name);
+    List<Item> cart = null;
+    if (!string.IsNullOrEmpty(jsonString))
+    {
+        cart = JsonConvert.DeserializeObject<List<Item>>(jsonString);
+    }
+}
+@if (cart != null && cart.Any())
+{
+    <div class="row">
+        <div class="col-md-4 order-md-2 mb-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">Your cart</span>
+                <span class="badge badge-secondary badge-pill">3</span>
+            </h4>
+            <ul class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    @foreach (var item in cart)
+                    {
+                        <div>
+                            <h6 class="my-0">@item.Product.Name</h6>
+                            <small class="text-muted">Brief description</small>
+                        </div>
+                        <span class="text-muted">@item.Product.Price</span>
+                    }
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between">
+                    @{
+                        var total = (from data in cart
+                                     select data.Product.Price * data.Quantity).Sum();
+                    }
+                    <span>Total (EG)</span>
+              <strong>@total</strong>
+            </li>
+          </ul>
+
+     
+        </div>
+        <div class="col-md-8 order-md-1">
+          <h4 class="mb-3">Billing address</h4>
+            <form method="post" asp-action="Index" asp-controller="Home" class="needs-validation" novalidate>
+            <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="FirstName">First name</label>
+                        <input type="text" class="form-control" id="firstName" asp-for="FirstName" placeholder="" data-val="true" data-val-required="First name is required.">
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="LastName">Last name</label>
+                        <input type="text" class="form-control" id="firstName" asp-for="LastName" placeholder="" data-val="true" data-val-required="First name is required.">
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+            </div>
+
+                <div class="mb-3">
+                    <label asp-for="Username">Username</label>
+                    <input type="text" class="form-control"  asp-for="Username" placeholder="" data-val="true">
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+            <div class="mb-3">
+                    <label asp-for="Email">Email</label>
+                    <input type="text" class="form-control" asp-for="Email" placeholder="" data-val="true">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                    <label asp-for="Address">Address</label>
+                    <input type="text" class="form-control" asp-for="Address" placeholder="" data-val="true">
+                    <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+              <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
+              <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+            </div>
+
+            <div class="row">
+              <div class="col-md-5 mb-3">
+                <label for="country">Country</label>
+                <select class="custom-select d-block w-100" id="country" required>
+                  <option value="">Choose...</option>
+                  <option>Egypt</option>
+                </select>
+                <div class="invalid-feedback">
+                  Please select a valid country.
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="state">State</label>
+                <select class="custom-select d-block w-100" id="state" required>
+                  <option value="">Choose...</option>
+                  <option>Cairo</option>
+                    <option>Giza</option>
+                        <option>Aswan</option>
+                </select>
+                <div class="invalid-feedback">
+                  Please provide a valid state.
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                        <label asp-for="Zip">Zip code</label>
+                        <input type="text" class="form-control" asp-for="Zip" placeholder="" data-val="true">
+                        <span asp-validation-for="Zip" class="text-danger"></span>
+              </div>
+            </div>
+            <hr class="mb-4">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="same-address">
+              <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="save-info">
+              <label class="custom-control-label" for="save-info">Save this information for next time</label>
+            </div>
+            <hr class="mb-4">
+
+            <h4 class="mb-3">Payment</h4>
+
+            <div class="d-block my-3">
+              <div class="custom-control custom-radio">
+                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+                <label class="custom-control-label" for="credit">Credit card</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+                <label class="custom-control-label" for="debit">Debit card</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+                <label class="custom-control-label" for="paypal">Paypal</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                        <label asp-for="CridtCardName">Name on card</label>
+                        <input type="text" class="form-control" asp-for="CridtCardName" placeholder="" data-val="true">
+                        <span asp-validation-for="CridtCardName" class="text-danger"></span>
+              </div>
+              <div class="col-md-6 mb-3">
+                        <label asp-for="CridtCardNumber">Cridt Card Number</label>
+                        <input type="text" class="form-control" asp-for="CridtCardNumber" placeholder="" data-val="true">
+                        <span asp-validation-for="CridtCardNumber" class="text-danger"></span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3 mb-3">
+                        <label asp-for="Expiration">Expiration</label>
+                        <input type="text" class="form-control" asp-for="Expiration" placeholder="" data-val="true">
+                        <span asp-validation-for="Expiration" class="text-danger"></span>
+              </div>
+              <div class="col-md-3 mb-3">
+                        <label asp-for="CVV">CVV</label>
+                        <input type="text" class="form-control" asp-for="CVV" placeholder="" data-val="true">
+                        <span asp-validation-for="CVV" class="text-danger"></span>
+              </div>
+            </div>
+            <hr class="mb-4">
+                <button type="submit" class="btn btn-primary btn-lg btn-block" onclick="myFunction()">Continue to checkout</button>
+
+@*            <a href="/Home/Index" class="btn btn-primary btn-lg btn-block" onclick="myFunction()">Continue to checkout</a>
+*@          </form>
+        </div>
+      </div>
+      }
+else
+{
+    <p>Your cart is currently empty.</p>
+}
+    <script>
+        function myFunction() {
+
+            alert("@TempData["check"]");
+        }
+    </script>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

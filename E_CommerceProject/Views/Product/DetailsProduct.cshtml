@@ -1,0 +1,27 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "DetailsProduct";
+}
+
+<h1>Details Product</h1>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-3">
+            <div class="card">
+                @if (!string.IsNullOrEmpty(Model.Image))
+                {
+                    <img src="~/images/@Model.Image" alt="Product Image" class="card-img-top">
+                }
+                <div class="card-body text-center">
+                    <p class="card-text">Product Id = @Model.Id</p>
+                    <h5 class="card-title">@Model.Name</h5>
+                    <p class="card-text">@Model.Description</p>
+                    <p class="card-text">Price: @Model.Price</p>
+                    <p class="card-text">Quantity: @Model.Quantity</p>
+                    <a href="/Product/Index" class="btn btn-primary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+﻿@model Product
+@{
+    ViewBag.Link = "EditProduct";
+    ViewBag.id = Model.Id;
+    SelectList CategoryOptions = new SelectList(ViewBag.Category, "Id", "Name");
+    ViewData["Title"] = "EditProduct";
+}
+
+<h1>Edit Product</h1>
+
+<partial name="_AddEdit" />

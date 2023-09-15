@@ -1,0 +1,45 @@
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="container px-4 px-lg-5 mt-5">
+    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        @foreach (var p in Model)
+        {
+            <div class="col mb-5">
+                <!-- Adjust the column width and add margin-bottom -->
+                <div class="card h-100">
+                    @if (!string.IsNullOrEmpty(p.Image))
+                    {
+                        <img src="~/images/@p.Image" alt="Product Image" class="card-img-top">
+                    }
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                        <h5 class="fw-bolder">@p.Name</h5>
+                        <p class="card-text">@p.Description</p>
+                        <p class="card-text">Price: @p.Price</p>
+                        </div>
+                    </div>
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        @if (p.Quantity>0) {
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/Cart/AddToCart/@p.Id">Add to cart</a></div>
+                        }
+                        else
+                        {
+                            <button class="btn btn-outline-dark mt-auto" onclick="myFunction()">Add to cart</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+
+    function myFunction() {
+        alert("Not enough products in stock."); // Display the message in an alert
+    }
+</script>
+
+
