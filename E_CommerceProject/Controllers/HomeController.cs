@@ -1,6 +1,7 @@
 ﻿using E_CommerceProject.Data;
 using E_CommerceProject.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace E_CommerceProject.Controllers
@@ -22,7 +23,19 @@ namespace E_CommerceProject.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Category = Db.Categories.ToList();
             return View(Db.Products.ToList());
+        }
+       
+        public IActionResult ListByCategory(int categoryId)
+        {
+            if(categoryId == 0)
+            {
+                return RedirectToAction("Index");
+            }
+            var products = Db.Products.Where(p => p.CategoryId == categoryId).ToList();
+            ViewBag.Category = Db.Categories.ToList();
+            return View("Index",products);
         }
 
         public IActionResult Privacy()

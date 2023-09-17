@@ -2,6 +2,17 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+<form id="categoryForm" asp-controller="Home" asp-action="ListByCategory" method="get">
+    <select class="form-select" aria-label="Default select example" name="categoryId">
+        <option value="" selected>Select Category</option>
+        <option value="0">All</option>
+        @foreach (var category in ViewBag.Category)
+        {
+            <option value="@category.Id">@category.Name</option>
+        }
+    </select>
+</form>
+
 <div class="container px-4 px-lg-5 mt-5">
     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
         @foreach (var p in Model)
@@ -43,3 +54,10 @@
 </script>
 
 
+<script>
+    // Attach an event listener to the category dropdown
+    document.querySelector("select[name='categoryId']").addEventListener("change", function () {
+        // Trigger form submission when a category is selected
+        document.querySelector("#categoryForm").submit();
+    });
+</script>
