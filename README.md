@@ -6,7 +6,6 @@ It allows users to browse products, add them to their cart, and make purchases. 
 ## Table of Contents
 - [Features](#features)
 - [Installation](#installation)
-- [Usage](#usage)
 ## Features
 - User Authentication: Register, log in, and log out securely.
 - Product Catalog: Browse products.
